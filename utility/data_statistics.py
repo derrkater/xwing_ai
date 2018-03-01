@@ -11,7 +11,11 @@ def get_average_pilot_count(lists):
 
 
 def get_pilot_counts_histogram(lists):
-    raise NotImplementedError
+    pilot_counts_histogram = defaultdict(lambda: 0)
+    for list in lists:
+        pilot_counts_histogram[len(list['pilots'])] += 1
+
+    return dict(pilot_counts_histogram)
 
 
 def get_average_upgrade_count(lists):
@@ -20,14 +24,22 @@ def get_average_upgrade_count(lists):
         upgrades_count = 0
         for pilot in list['pilots']:
             upgrades_by_type = pilot.get('upgrades', {})
-            upgrades_count += sum(len(upgrades_by_type) for upgrades_by_type in upgrades_by_type.values())
+            upgrades_count += sum(len(upgrades) for upgrades in upgrades_by_type.values())
         upgrades_counts.append(upgrades_count)
 
     return np.average(upgrades_counts)
 
 
 def get_upgrade_count_histogram(lists):
-    raise NotImplementedError
+    upgrade_count_histogram = defaultdict(lambda: 0)
+    for list in lists:
+        upgrades_count = 0
+        for pilot in list['pilots']:
+            upgrades_by_type = pilot.get('upgrades', {})
+            upgrades_count += sum(len(upgrades) for upgrades in upgrades_by_type.values())
+        upgrade_count_histogram[upgrades_count] += 1
+
+    return dict(upgrade_count_histogram)
 
 
 def get_average_upgrade_count_per_ship(lists):
@@ -41,9 +53,15 @@ def get_average_upgrade_count_per_ship(lists):
     return np.average(upgrades_counts)
 
 
-
 def get_upgrade_count_per_ship_histogram(lists):
-    raise NotImplementedError
+    upgrade_count_per_ship_histogram = defaultdict(lambda: 0)
+    for list in lists:
+        for pilot in list['pilots']:
+            upgrades_by_type = pilot.get('upgrades', {})
+            upgrades_count = sum(len(upgrades_by_type) for upgrades_by_type in upgrades_by_type.values())
+            upgrade_count_per_ship_histogram[upgrades_count] += 1
+
+    return dict(upgrade_count_per_ship_histogram)
 
 
 def get_average_points(lists):
@@ -59,4 +77,25 @@ def get_faction_count(lists):
     for list in lists:
         factions_count[list['faction']] += 1
 
-    return factions_count
+    return dict(factions_count)
+
+
+def count_pilots_usages(lists):
+    pilot_usages = defaultdict(lambda: 0)
+    for list in lists:
+        for pilot in list['pilots']:
+            pilot_usages[pilot['name']] += 1
+
+    return dict(pilot_usages)
+
+
+def count_upgrade_usages(lists):
+    upgrade_usages = defaultdict(lambda: 0)
+    for list in lists:
+        for pilot in list['pilots']:
+            upgrades_by_type = pilot.get('upgrades', {})
+            for upgrades in upgrades_by_type.values():
+                for upgrade in upgrades:
+                    upgrade_usages[upgrade] += 1
+
+    return dict(upgrade_usages)
