@@ -1,7 +1,7 @@
 from objects.squadron import Squadron
 
 
-def get_lists(matches):
+def get_lists_with_points(matches):
     """
     Gets list of player lists from list of matches. Includes list point cost which is recovered from pretty print format.
     :param matches:

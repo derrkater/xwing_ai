@@ -1,5 +1,26 @@
+import operator
 from collections import defaultdict
 import numpy as np
+
+
+def analyze_lists(lists):
+    print('Factions:\t{}'.format(get_faction_count(lists)))
+    print('Average points:\t{}'.format(get_average_points(lists)))
+    print('Average pilots:\t{}'.format(get_average_pilot_count(lists)))
+    print('Pilot counts histogram:\t{}'.format(get_pilot_counts_histogram(lists)))
+    print('Average upgrades:\t{}'.format(get_average_upgrade_count(lists)))
+    print('Upgrade count histogram:\t{}'.format(get_upgrade_count_histogram(lists)))
+    print('Average upgrades/ship:\t{}'.format(get_average_upgrade_count_per_ship(lists)))
+    print('Upgrade count/ship histogram:\t{}'.format(get_upgrade_count_per_ship_histogram(lists)))
+
+    pilots_usages = count_pilots_usages(lists)
+    pilots_usages_sorted = sorted(pilots_usages.items(), key=operator.itemgetter(1), reverse=True)
+    print('Pilots used:\t{}'.format(len(pilots_usages)))
+    print(pilots_usages_sorted)
+    upgrade_usages = count_upgrade_usages(lists)
+    upgrade_usages_sorted = sorted(upgrade_usages.items(), key=operator.itemgetter(1), reverse=True)
+    print('Upgrades used:\t{}'.format(len(upgrade_usages)))
+    print(upgrade_usages_sorted)
 
 
 def get_average_pilot_count(lists):

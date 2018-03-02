@@ -1,12 +1,12 @@
-import pymongo, operator
-from utility.data_statistics import *
-from utility.lists_utility import *
-from objects.squadron import Squadron
+from mongo.mongo_wrapper import get_matches
+from utility.lists_utility import get_lists_with_points, count_lists, count_matches_with_lists
+from data_analysis.lists_statistics import analyze_lists
+from utility.data_preprocessing import get_cards, get_pilot_and_upgrades_ngrams
 
 
 def main():
     matches = get_matches()
-    lists = get_lists(matches)
+    lists = get_lists_with_points(matches)
 
     print('For {} matches played there are {} lists. {} matches have both lists'.format(len(matches),
                                                                                         count_lists(matches),
@@ -20,43 +20,12 @@ def main():
     print('PLAYER: {}'.format(player_1))
 
     list = player_1['xws']
-    print(len(list['pilots']))
-    analyze_lists(lists)
-
-    # print(sys.getsizeof(matches))
-
-
-def get_matches():
-    league_index = 2
-
-    client = pymongo.MongoClient()
-    db = client.xwing_ai
-
-    collection_name = 'league_matches_{}'.format(league_index)
-    collection = db[collection_name]
-
-    doc = collection.find_one()
-    return doc['matches']
-
-
-def analyze_lists(lists):
-    print('Factions:\t{}'.format(get_faction_count(lists)))
-    print('Average points:\t{}'.format(get_average_points(lists)))
-    print('Average pilots:\t{}'.format(get_average_pilot_count(lists)))
-    print('Pilot counts histogram:\t{}'.format(get_pilot_counts_histogram(lists)))
-    print('Average upgrades:\t{}'.format(get_average_upgrade_count(lists)))
-    print('Upgrade count histogram:\t{}'.format(get_upgrade_count_histogram(lists)))
-    print('Average upgrades/ship:\t{}'.format(get_average_upgrade_count_per_ship(lists)))
-    print('Upgrade count/ship histogram:\t{}'.format(get_upgrade_count_per_ship_histogram(lists)))
-
-    pilots_usages = count_pilots_usages(lists)
-    pilots_usages_sorted = sorted(pilots_usages.items(), key=operator.itemgetter(1), reverse=True)
-    print('Pilots used:\t{}'.format(len(pilots_usages)))
-    print(pilots_usages_sorted)
-    upgrade_usages = count_upgrade_usages(lists)
-    upgrade_usages_sorted = sorted(upgrade_usages.items(), key=operator.itemgetter(1), reverse=True)
-    print('Upgrades used:\t{}'.format(len(upgrade_usages)))
-    print(upgrade_usages_sorted)
+    print(player_1['pretty_print'])
+    card_set = get_cards(lists)
+    print(len(card_set), card_set)
+    ngrams = get_pilot_and_upgrades_ngrams(lists, 3)
+    print(ngrams)
+    print(len(ngrams))
 
 
 if __name__ == '__main__':
