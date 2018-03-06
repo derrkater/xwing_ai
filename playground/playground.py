@@ -1,7 +1,7 @@
 from mongo.mongo_wrapper import get_matches
 from utility.lists_utility import get_lists_with_points, count_lists, count_matches_with_lists
 from data_analysis.lists_statistics import analyze_lists
-from utility.data_preprocessing import get_cards, get_pilot_and_upgrades_ngrams
+from utility.data_preprocessing import get_cards, get_pilot_and_upgrades_ngrams, shuffle_ngrams
 
 
 def main():
@@ -23,8 +23,7 @@ def main():
     print(player_1['pretty_print'])
     card_set = get_cards(lists)
     print(len(card_set), card_set)
-    ngrams = get_pilot_and_upgrades_ngrams(lists, 3)
-    print(ngrams)
+    ngrams = get_pilot_and_upgrades_ngrams(lists, 4)
     print(len(ngrams))
 
 

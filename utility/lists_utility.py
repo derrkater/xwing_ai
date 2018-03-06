@@ -1,6 +1,3 @@
-from objects.squadron import Squadron
-
-
 def get_lists_with_points(matches):
     """
     Gets list of player lists from list of matches. Includes list point cost which is recovered from pretty print format.
@@ -22,17 +19,6 @@ def get_lists_with_points(matches):
             lists.append(list_2)
 
     return lists
-
-
-def get_squadrons(matches):
-    squadrons = []
-    for match in matches:
-        if match['player1']['list']:
-            squadrons.append(Squadron(match['player1']))
-        if match['player2']['list']:
-            squadrons.append(Squadron(match['player2']))
-
-    return squadrons
 
 
 def _get_points_from_pretty_print(player):
